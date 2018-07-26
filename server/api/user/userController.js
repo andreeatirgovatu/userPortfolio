@@ -22,13 +22,13 @@ class UserCtrl {
                 }
             );
     }
-    get_all_users(req, res, next) {
+    getAllUsers(req, res, next) {
         User.find({})
             .select('-password')
             .exec()
             .then(
                 users => {
-                    res.json(
+                    res.status(200).send(
                         users.map(user => {
                             return user.toJson();
                         })
@@ -39,32 +39,32 @@ class UserCtrl {
                 }
             );
     }
-    read_a_user(req, res, next) {
+    readUser(req, res, next) {
         delete req.user.reset_password_expires;
         delete req.user.reset_password_token;
-        res.json(req.user.toJson());
+        res.status(200).send(req.user.toJson());
     }
-    update_a_user(req, res, next) {
+    updateUser(req, res, next) {
         let user = _.merge(req.user, req.body);
         user.save((err, saved) => {
             if (err) {
                 next(err);
             } else {
-                res.json(saved.toJson());
+                res.status(201).send(saved.toJson());
             }
         });
     }
-    delete_a_user(req, res, next) {
+    deleteUser(req, res, next) {
         req.user.remove((err, removed) => {
             if (err) {
                 next(err);
             } else {
-                res.json(removed.toJson());
+                res.status(204).send(removed.toJson());
             }
         });
     }
-    image_profile(req, res, next) {
-        res.json(req.user.file);
+    imageProfile(req, res, next) {
+        res.status(200).send(req.user.file);
     }
 }
 

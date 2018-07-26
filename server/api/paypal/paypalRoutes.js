@@ -37,7 +37,7 @@ const ensureAuthorized = (req, res, next) => {
     }
 };
 
-paypalRouter.route('/:userId').post(ensureAuthorized, portfolioCtrl.pay_now);
+paypalRouter.route('/:userId').post(ensureAuthorized, portfolioCtrl.payNow);
 
 paypalRouter.route('/success').get(portfolioCtrl.execute);
 

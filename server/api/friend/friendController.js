@@ -20,15 +20,17 @@ class FriendCtrl {
                 }
             );
     }
+
     remove_friend(req, res, next) {
         req.friend.remove((err, removed) => {
             if (err) {
                 next(err);
             } else {
-                res.json(removed);
+                res.status(204).send(removed);
             }
         });
     }
+
     remove_all_friends(req, res, next) {
         Friend.remove(
             {
@@ -36,17 +38,19 @@ class FriendCtrl {
             },
             (err, friends) => {
                 if (err) next(err);
-                res.json({ message: 'Friend successfully deleted' });
+                res.send(204).send(friends);
             }
         );
     }
+
     add_friend(req, res, next) {
         let friend = new Friend(req.body);
         friend.save((err, list) => {
             if (err) return next(err);
-            res.json(list);
+            res.status(201).send(list);
         });
     }
+
     get_added_friends(req, res, next) {
         Friend.find({})
             .exec()
@@ -59,8 +63,9 @@ class FriendCtrl {
                 }
             );
     }
+
     get_friend(req, res, next) {
-        res.json(req.friend);
+        res.status(200).send(req.friend);
     }
 }
 

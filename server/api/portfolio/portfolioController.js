@@ -31,7 +31,7 @@ class PortfolioCtrl {
                 }
             );
     }
-    pay_now(req, res) {
+    payNow(req, res, next) {
         const create_payment_json = {
             intent: 'authorize',
             payer: {
@@ -63,15 +63,15 @@ class PortfolioCtrl {
             ]
         };
         paypal.payment.create(create_payment_json, (error, payment) => {
-            if (error) throw error;
+            if (error) next(error);
             if (!payment) {
-                res.send(404, { message: 'Payment not found!' });
+                res.status(404).send({ message: 'Payment not found!' });
             } else if (payment.payer.payment_method === 'paypal') {
-                res.json(payment);
+                res.status(201).send(payment);
             }
         });
     }
-    execute(req, res) {
+    execute(req, res, next) {
         const payerId = req.query.PayerID;
         const paymentId = req.query.paymentId;
         let execute_payment_json = {
@@ -90,47 +90,47 @@ class PortfolioCtrl {
             execute_payment_json,
             (error, payment) => {
                 if (error) {
-                    throw error;
+                    next(error);
                 } else {
-                    res.json(payment);
+                    res.status(200).send(payment);
                 }
             }
         );
     }
-    create_portfolio(req, res) {
+    createPortfolio(req, res) {
         let portfolio = new Portfolio(req.body);
         portfolio.save((err, files) => {
             if (err) res.send(err);
-            res.json(files);
+            res.status(201).send(files);
         });
     }
-    portfolio_images_for_a_user(req, res) {
+    portfolioImages(req, res, next) {
         Portfolio.find({ userId: req.params.userId }, (err, files) => {
-            if (err) res.send(err);
-            res.json(files);
+            if (err) next(err);
+            res.status(200).send(files);
         });
     }
-    update_portfolio(req, res) {
+    updatePortfolio(req, res) {
         Portfolio.findOne(
             { _id: req.params.portfolioId, userId: req.params.userId },
             (err, portfolio) => {
-                if (err) throw err;
+                if (err) next(err);
 
                 if (!portfolio) {
                     res.send(404, { message: 'Portfolio not found!' });
                 } else if (portfolio) {
                     portfolio.files = portfolio.files.concat(req.body.files);
                     portfolio.save((err, portfolio) => {
-                        if (err) res.send(err);
-                        res.json(portfolio);
+                        if (err) next(err);
+                        res.status(201).send(portfolio);
                     });
                 }
             }
         );
     }
-    list_all_portfolios(req, res) {
+    allPortfolios(req, res, next) {
         Portfolio.find({ userId: req.params.userId }, (err, files) => {
-            if (err) res.send(err);
+            if (err) next(err);
             if (files) {
                 let portfolioName = files
                     .map((value, index) => {
@@ -141,51 +141,45 @@ class PortfolioCtrl {
                     .filter((value, index) => {
                         return value;
                     });
-                res.json(portfolioName);
+                res.status(200).send(portfolioName);
             }
         });
     }
-    delete_a_portfolio_by_userId_for_a_user(req, res) {
+    deletePortfolio(req, res, next) {
         Portfolio.remove(
             {
                 userId: req.params.userId
             },
             (err, user) => {
-                if (err) res.send(err);
-                res.json({ message: 'Portfolio successfully deleted' });
+                if (err) next(err);
+                res.status(204).send({ message: 'Portfolio successfully deleted' });
             }
         );
     }
-    delete_a_image_by_imageId_for_a_user(req, res) {
+    deleteImage(req, res, next) {
         Portfolio.findById(
             {
                 _id: req.params.portfolioId,
                 userId: req.params.userId
             },
             (err, portfolio) => {
-                if (err) throw err;
+                if (err) next(err);
                 portfolio.files.id(req.params.imageId).remove();
                 portfolio.save((err, portfolio) => {
-                    if (err) res.send(err);
-                    res.json(portfolio);
+                    if (err) next(err);
+                    res.status(204).send(portfolio);
                 });
             }
         );
     }
-    images_from_a_portfolio(req, res) {
+    imagesFromPortfolio(req, res, next) {
         Portfolio.findOne(
             { _id: req.params.portfolioId, userId: req.params.userId },
             (err, images) => {
-                if (err) res.send(err);
-                res.json(images);
+                if (err) next(err);
+                res.status(200).send(images);
             }
         );
-    }
-    list_all_users(req, res) {
-        User.find({}, (err, user) => {
-            if (err) res.send(err);
-            res.json(user);
-        });
     }
 }
 

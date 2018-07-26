@@ -53,15 +53,17 @@ class AuthCtrl {
                     });
                 },
                 (token, user) => {
-                    var transporter = nodemailer.createTransport({
+                    let transporter = nodemailer.createTransport({
                         service: 'gmail',
                         host: 'smtp.gmail.com',
+                        port: 587,
+                        secure: false,
                         auth: {
                             user: 'tirgovatu.andreea@gmail.com',
                             pass: config.secrets.apiPass
                         }
                     });
-                    var mailOptions = {
+                    let mailOptions = {
                         from: 'noreplay@test.comm',
                         to: 'tirgovatu.andreea@gmail.com',
                         subject: 'Password Reset',
@@ -71,16 +73,9 @@ class AuthCtrl {
               '/#/reset/' +
               token
                     };
-
                     transporter.sendMail(mailOptions, (err, result) => {
                         if (err) {
-                            return res
-                                .status(err.code)
-                                .send({
-                                    message: err.message,
-                                    err: err
-                                })
-                                .end();
+                            next(err);
                         }
                         res.json({
                             message: 'Email sent! Please verify your email address!'
@@ -89,7 +84,6 @@ class AuthCtrl {
                 }
             ],
             err => {
-                console.log(err);
                 if (err) {
                     next(err);
                 }
