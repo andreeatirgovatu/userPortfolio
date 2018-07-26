@@ -97,10 +97,10 @@ class PortfolioCtrl {
             }
         );
     }
-    createPortfolio(req, res) {
+    createPortfolio(req, res, next) {
         let portfolio = new Portfolio(req.body);
         portfolio.save((err, files) => {
-            if (err) res.send(err);
+            if (err) next(err);
             res.status(201).send(files);
         });
     }
@@ -111,7 +111,7 @@ class PortfolioCtrl {
         });
     }
 
-    updatePortfolio(req, res) {
+    updatePortfolio(req, res, next) {
         Portfolio.findOne(
             { _id: req.params.portfolioId, userId: req.params.userId },
             (err, portfolio) => {

@@ -16,7 +16,7 @@ friendsRouter
 friendsRouter.param('friendId', controller.params);
 friendsRouter
     .route('/:friendId/:userId')
-    .get(checkUser, controller.getFriend)
+    .get(checkUser, controller.getFriendDetails)
     .delete(checkUser, controller.removeFriend);
 
 export default friendsRouter;

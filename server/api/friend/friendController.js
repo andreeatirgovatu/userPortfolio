@@ -64,7 +64,7 @@ class FriendCtrl {
             );
     }
 
-    getFriend(req, res) {
+    getFriendDetails(req, res) {
         res.status(200).send(req.friend);
     }
 }
