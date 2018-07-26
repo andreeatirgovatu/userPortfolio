@@ -1,19 +1,12 @@
 import config from '../../config';
 import Portfolio from './portfolioModel';
 import paypal from 'paypal-rest-sdk';
+import configPaypal from '../../config/paypalConfig';
 
 class PortfolioCtrl {
     constructor() {
-        paypal.configure({
-            host: 'api.sandbox.paypal.com',
-            port: '',
-            client_id:
-        'ASM3Mhh3ymQh2ncJZfa7xXmn9LR5lypwiPI3XNZsWsq3bDjNKQCd72KoVtZqbNcIW-avt1Cz3x8qS7fO',
-            client_secret:
-        'EIohBWnfcxM_MeaG2-VpI9yqlpkXJliWmnCrPZ7PCVfEmizZGxsz4eSbbxM6PW8zzR7ctuZDIGC0Le44'
-        });
+        paypal.configure(configPaypal);
     }
-
     params(req, res, next, id) {
         Portfolio.findById(id)
             .exec()
