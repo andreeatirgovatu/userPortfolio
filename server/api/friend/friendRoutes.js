@@ -9,14 +9,14 @@ const friendsRouter = Router();
 
 friendsRouter
     .route('/:userId')
-    .get(checkUser, controller.get_added_friends)
-    .post(checkUser, controller.add_friend)
-    .delete(checkUser, controller.remove_all_friends);
+    .get(checkUser, controller.getAddedFriends)
+    .post(checkUser, controller.addFriend)
+    .delete(checkUser, controller.removeAllFriends);
 
 friendsRouter.param('friendId', controller.params);
 friendsRouter
     .route('/:friendId/:userId')
-    .get(checkUser, controller.get_friend)
-    .delete(checkUser, controller.remove_friend);
+    .get(checkUser, controller.getFriend)
+    .delete(checkUser, controller.removeFriend);
 
 export default friendsRouter;

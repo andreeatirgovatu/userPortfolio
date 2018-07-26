@@ -6,8 +6,10 @@ const controller = new PortfolioCtrl();
 const auth = new CheckAuth();
 const checkUser = [auth.decodeToken(), auth.getFreshUser()];
 const portfolioRouter = Router();
-console.log(controller);
-portfolioRouter.route('/:userId/list').get(checkUser, controller.allPortfolios);
+
+portfolioRouter
+    .route('/:userId/list')
+    .get(checkUser, controller.portfolioNames);
 
 portfolioRouter
     .route('/:userId')

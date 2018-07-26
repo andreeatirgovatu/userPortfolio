@@ -110,6 +110,7 @@ class PortfolioCtrl {
             res.status(200).send(files);
         });
     }
+
     updatePortfolio(req, res) {
         Portfolio.findOne(
             { _id: req.params.portfolioId, userId: req.params.userId },
@@ -128,7 +129,8 @@ class PortfolioCtrl {
             }
         );
     }
-    allPortfolios(req, res, next) {
+
+    portfolioNames(req, res, next) {
         Portfolio.find({ userId: req.params.userId }, (err, files) => {
             if (err) next(err);
             if (files) {

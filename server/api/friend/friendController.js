@@ -21,7 +21,7 @@ class FriendCtrl {
             );
     }
 
-    remove_friend(req, res, next) {
+    removeFriend(req, res, next) {
         req.friend.remove((err, removed) => {
             if (err) {
                 next(err);
@@ -31,7 +31,7 @@ class FriendCtrl {
         });
     }
 
-    remove_all_friends(req, res, next) {
+    removeAllFriends(req, res, next) {
         Friend.remove(
             {
                 userId: req.params.userId
@@ -43,7 +43,7 @@ class FriendCtrl {
         );
     }
 
-    add_friend(req, res, next) {
+    addFriend(req, res, next) {
         let friend = new Friend(req.body);
         friend.save((err, list) => {
             if (err) return next(err);
@@ -51,12 +51,12 @@ class FriendCtrl {
         });
     }
 
-    get_added_friends(req, res, next) {
+    getAddedFriends(req, res, next) {
         Friend.find({})
             .exec()
             .then(
                 friends => {
-                    res.json(friends);
+                    res.status(200).send(friends);
                 },
                 err => {
                     next(err);
@@ -64,7 +64,7 @@ class FriendCtrl {
             );
     }
 
-    get_friend(req, res, next) {
+    getFriend(req, res) {
         res.status(200).send(req.friend);
     }
 }
