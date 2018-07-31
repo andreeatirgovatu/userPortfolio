@@ -103,7 +103,6 @@ class PortfolioCtrl {
             res.status(200).send(files);
         });
     }
-
     updatePortfolio(req, res, next) {
         Portfolio.findOne(
             { _id: req.params.portfolioId, userId: req.params.userId },
